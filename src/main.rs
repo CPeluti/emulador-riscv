@@ -1,5 +1,8 @@
 use std::fs;
+use regex::Regex;
+//TODO: definir alias para regs
 
+// vetor da memoria
 #[derive(Debug)]
 struct Instruction {
     opcode: Option<String>,
@@ -9,6 +12,14 @@ struct Instruction {
     rd: Option<String>,
     rs1: Option<String>,
     rs2: Option<String>
+}
+
+#[derive(Debug)]
+struct Definition {
+    opcode: String,
+    funct3: String,
+    funct7: String,
+    operation: String
 }
 
 fn parse_instructions(inst: &str) -> Instruction{
@@ -99,15 +110,40 @@ fn parse_file(file_path: &str) -> Vec<Instruction> {
 
     for line in vec {
         let instruction: Instruction = parse_instructions(line);
-        println!("{:?}", instruction);
         parsed.push(instruction);
     }
 
     return parsed
 }
+fn parse_def(file_path: &str) -> Vec<Definition>{
+    let contents = fs::read_to_string(file_path).expect("Should have been able to read the file");
+    let re = Regex::new(r"([0-9]{7})\s+([0-9]{3})\s+([0-9]{5}|\-{1})\s+([[:ascii:]].*)").unwrap();
+    let mut defs = Vec::new();
+    for cap in re.captures_iter(&contents){
+        defs.push(
+            Definition{
+                opcode: cap[1].to_string(),
+                funct3: cap[2].to_string(),
+                funct7: cap[3].to_string(),
+                operation: cap[4].to_string()
+            }
+        )
+    }
+    return defs
+}
+// faz parse das instrucoes em binario
+fn process_inst(instructions: Vec<Instruction>) {
+    let defs = parse_def("/home/caio/projetos/emulador-riscv/src/insts");
+    println!("{:?}",defs);
+    // for inst in instructions {
+    // }
+    //match para resolver a instrucao
+}
 
 fn main() {
     let parsed_file = parse_file("/home/caio/projetos/emulador-riscv/src/test.txt");
+    // println!("{:?}",parsed_file);
+    process_inst(parsed_file);
     // for line in 0..parsed_file.len() {
     //     println!("{}", parsed_file[line]);
     // }
