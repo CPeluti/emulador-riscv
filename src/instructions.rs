@@ -52,7 +52,7 @@ pub fn mulh(rs1: i64, rs2: i64, rd: &mut i32) {
 }
 
 pub fn mulhsu(rs1: i64, rs2: u64, rd: &mut i32) {
-    *rd = ((rs1 * rs2 as i 64) as u64 >> 32) as i32;
+    *rd = ((rs1 * rs2 as i64) as u64 >> 32) as i32;
 }
 
 pub fn mulhu(rs1: u32, rs2: u32, rd: &mut i32) {
