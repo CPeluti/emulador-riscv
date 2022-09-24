@@ -21,7 +21,7 @@ pub struct Definition {
 }
 
 pub fn parse_instructions(inst: &str) -> Instruction{
-    let opcode = &inst[25..];
+    let opcode = &inst[25..32];
     // create instruction with opcode
     let mut instruction: Instruction = Instruction{
         opcode: Some(opcode.to_string()),
@@ -122,6 +122,7 @@ pub fn parse_file(file_path: &str) -> Vec<Instruction> {
 
     for line in vec {
         let instruction: Instruction = parse_instructions(line);
+        println!("{:?}", instruction);
         parsed.push(instruction);
     }
 
