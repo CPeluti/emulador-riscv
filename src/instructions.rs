@@ -6,7 +6,7 @@ pub fn add(rs1: i32, rs2: i32, rd: &mut i32) {
 }
 
 pub fn sub(rs1: i32, rs2: i32, rd: &mut i32) {
-    *rd = rs1 + rs2;
+    *rd = rs1 - rs2;
 }
 
 pub fn xor(rs1: i32, rs2: i32, rd: &mut i32) {
@@ -21,19 +21,19 @@ pub fn and(rs1: i32, rs2: i32, rd: &mut i32) {
     *rd = rs1 & rs2;
 }
 
-pub fn sll(rs1: i32, rs2: i32, rd: &mut i32) {
-    *rd = rs1 << rs2;
+pub fn sll(rs1: u32, rs2: u32, rd: &mut i32) {
+    *rd = (rs1 << rs2) as i32;
 }
 
-pub fn srl(rs1: i32, rs2: i32, rd: &mut i32) {
-    *rd = rs1 >> rs2;
+pub fn srl(rs1: u32, rs2: u32, rd: &mut i32) {
+    *rd = (rs1 >> rs2) as i32;
 }
 
 pub fn sra(rs1: i32, rs2: i32, rd: &mut i32) {
-    *rd = if rs1 < rs2 {1} else {0};
+    *rd = rs1 >> rs2;
 }
 
-pub fn slt(rs1: u32, rs2: u32, rd: &mut i32) {
+pub fn slt(rs1: i32, rs2: i32, rd: &mut i32) {
     *rd = if rs1 < rs2 {1} else {0};
 }
 
@@ -47,16 +47,16 @@ pub fn mul(rs1: i32, rs2: i32, rd: &mut i32) {
     *rd = rs1 * rs2;
 }
 
-pub fn mulh(rs1: i32, rs2: i32, rd: &mut i32) {
-    *rd = rs1 * rs2;
+pub fn mulh(rs1: i64, rs2: i64, rd: &mut i32) {
+    *rd = ((rs1 * rs2) as u64 >> 32) as i32;
 }
 
-pub fn mulsu(rs1: u32, rs2: u32, rd: &mut i32) {
-    *rd = (rs1 * rs2) as i32;
+pub fn mulhsu(rs1: i64, rs2: u64, rd: &mut i32) {
+    *rd = ((rs1 * rs2 as i 64) as u64 >> 32) as i32;
 }
 
-pub fn mulu(rs1: u32, rs2: u32, rd: &mut i32) {
-    *rd = (rs1 * rs2) as i32;
+pub fn mulhu(rs1: u32, rs2: u32, rd: &mut i32) {
+    *rd = ((rs1 * rs2) >> 32) as i32;
 }
 
 pub fn div(rs1: i32, rs2: i32, rd: &mut i32) {
