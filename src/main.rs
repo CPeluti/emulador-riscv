@@ -4,6 +4,7 @@ use regex::Regex;
 mod parser;
 mod interpreter;
 mod instructions;
+mod registradores;
 // vetor da memoria
 
 fn main() {

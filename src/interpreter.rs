@@ -8,32 +8,35 @@ use crate::registradores::Registradores;
 pub fn interpret(instruction_list: Vec<Instruction>) -> () {
     //pilha
     let mut stack: Vec<Instruction> = instruction_list;
-    let regs: Registradores;
+    let mut stack2: Vec<i32>;
+    let regs: Registradores = Registradores { zero: (0), pc: (0), ra: (0), sp: (0), gp: (0), tp: (0), t0: (0), t1: (0), t2: (0), t3: (0), t4: (0), t5: (0), t6: (0), s0: (0), s1: (0), s2: (0), s3: (0), s4: (0), s5: (0), s6: (0), s7: (0), s8: (0), s9: (0), s10: (0), s11: (0), a0: (0), a1: (0), a2: (0), a3: (0), a4: (0), a5: (0), a6: (0), a7: (0) };
 
     loop {
-        let instruction: Result<&Instruction, &str> = stack.get(pc).ok_or("no instruction");
+        let instruction: Result<&Instruction, &str> = stack.get(*regs.get_pc() as usize).ok_or("no instruction");
         let inst = match instruction {
             Ok(inst) => inst,
-            Err(_) => return //No real error handling here, remake
+            Err(_) => panic!("Instruction not found")
         };
         let opcode = &inst.opcode;
         let f3 = &inst.funct3;
         let f7 = &inst.funct7;
-        
+
         // Breve refatorada aqui, código do Ligoski infelizmente não funcionava
         // let Instruction { opcode: op, funct3: f3, funct7: f7, .. } = instruction;    (antes era isso)
         match opcode.as_ref().map(|x| &**x) {
 
             // Tipo I loads
             Some("0000011") => {
-                let mut rs1, imm, rd: &i32;
-                rs1 = regs.get_reg(inst.rs1);
-                rd = regs.get_reg(inst.rd)
-                imm = inst.imm.to_num //TODO
+                //let mut rs1, imm, rd: i32, i32, i32;
+                let rs1 = &regs.get_reg(&inst.rs1.as_ref());
+                let mut rd = &regs.get_reg(&inst.rd.as_ref());
+                let imm = inst.imm.as_ref().unwrap().parse::<i32>().unwrap();
+                //rd = regs.get_reg(inst.rd);
+                //imm = inst.imm.to_num //TODO
                 match f3.as_ref().map(|x| &**x) {
                     // lb
                     Some("000") => {
-                        instructions::lb(*rs1, imm, rd, stack)
+                        instructions::lb(*rs1, imm, &mut rd, stack2)
                     }
                     //lh
                     Some("001") => {}
@@ -43,7 +46,9 @@ pub fn interpret(instruction_list: Vec<Instruction>) -> () {
                     Some("100") => {}
                     //lhu
                     Some("101") => {}
-                    _ => {}
+                    _ => {
+                        panic!("Invalid funct3 value")
+                    }
                 }
             }
             // Tipo I
@@ -73,7 +78,9 @@ pub fn interpret(instruction_list: Vec<Instruction>) -> () {
                     Some("110") => {}
                     //andi
                     Some("111") => {}
-                    _ => {}
+                    _ => {
+                        panic!("Invalid funct3 value")
+                    }
                 }
             }
             // tipo U - auipc
@@ -89,7 +96,9 @@ pub fn interpret(instruction_list: Vec<Instruction>) -> () {
                     Some("001") => {}
                     //sw
                     Some("010") => {}
-                    _ => {}
+                    _ => {
+                        panic!("Invalid funct3 value")
+                    }
                 }
             }
             //jalr
@@ -120,7 +129,9 @@ pub fn interpret(instruction_list: Vec<Instruction>) -> () {
                             Some("110") => {}
                             //and
                             Some("111") => {}
-                            _ => {}
+                            _ => {
+                                panic!("Invalid funct7 value")
+                            }
                         }
                     }
                     Some("0100000") => {
@@ -129,7 +140,9 @@ pub fn interpret(instruction_list: Vec<Instruction>) -> () {
                             Some("000") => {}
                             //sra
                             Some("101") => {}
-                            _ => {}
+                            _ => {
+                                panic!("Invalid funct3 value")
+                            }
                         }
                     }
                     Some("0000001") => {
@@ -152,7 +165,9 @@ pub fn interpret(instruction_list: Vec<Instruction>) -> () {
                             Some("111") => {}
                             //mulh
                             Some("101") => {}
-                            _ => {}
+                            _ => {
+                                panic!("Invalid funct3 value")
+                            }
                         }
                     }
                     _ => {}
@@ -176,7 +191,9 @@ pub fn interpret(instruction_list: Vec<Instruction>) -> () {
                     Some("110") => {}
                     //csrrci
                     Some("111") => {}
-                    _ => {}
+                    _ => {
+                        panic!("Invalid funct3 value")
+                    }
                 }
             }
             // tipo B
@@ -194,11 +211,13 @@ pub fn interpret(instruction_list: Vec<Instruction>) -> () {
                     Some("110") => {}
                     //bgeu
                     Some("111") => {}
-                    _ => {}
+                    _ => {
+                        panic!("Invalid funct3 value")
+                    }
                 }
             }
             _ => {
-                println!("sexo2");
+                panic!("Invalid opcode");
             }
         }
     }
