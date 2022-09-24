@@ -52,9 +52,9 @@ pub fn interpret(instruction_list: Vec<Instruction>) -> () {
         let opcode = &inst.opcode;
         let f3 = &inst.funct3;
         let f7 = &inst.funct7;
+        
         // Breve refatorada aqui, código do Ligoski infelizmente não funcionava
-
-        // let Instruction { opcode: op, funct3: f3, funct7: f7, .. } = instruction;
+        // let Instruction { opcode: op, funct3: f3, funct7: f7, .. } = instruction;    (antes era isso)
         match opcode.as_ref().map(|x| &**x) {
 
             // Tipo I loads

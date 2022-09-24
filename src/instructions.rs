@@ -51,28 +51,28 @@ pub fn mulh(rs1: i32, rs2: i32, rd: &mut i32) {
     *rd = rs1 * rs2;
 }
 
-pub fn mulsu(rs1: u32, rs2: u32, rd: &mut u32) {
-    *rd = rs1 * rs2;
+pub fn mulsu(rs1: u32, rs2: u32, rd: &mut i32) {
+    *rd = (rs1 * rs2) as i32;
 }
 
-pub fn mulu(rs1: u32, rs2: u32, rd: &mut u32) {
-    *rd = rs1 * rs2;
+pub fn mulu(rs1: u32, rs2: u32, rd: &mut i32) {
+    *rd = (rs1 * rs2) as i32;
 }
 
 pub fn div(rs1: i32, rs2: i32, rd: &mut i32) {
     *rd = rs1 / rs2;
 }
 
-pub fn divu(rs1: u32, rs2: u32, rd: &mut u32) {
-    *rd = rs1 / rs2;
+pub fn divu(rs1: u32, rs2: u32, rd: &mut i32) {
+    *rd = (rs1 / rs2) as i32;
 }
 
 pub fn rem(rs1: i32, rs2: i32, rd: &mut i32) {
     *rd = rs1 % rs2;
 }
 
-pub fn remu(rs1: u32, rs2: u32, rd: &mut u32) {
-    *rd = rs1 % rs2;
+pub fn remu(rs1: u32, rs2: u32, rd: &mut i32) {
+    *rd = (rs1 % rs2) as i32;
 }
 
 // Tipo I
@@ -174,8 +174,8 @@ pub fn ecall(a0: &mut i32, a7: i32, pc: &mut i32) {
     //UNFINISHED
 }
 
-pub fn ebreak(rs1: i32, imm: i32, rd: &mut i32, pc: &mut i32) {
-    // TODO
+pub fn ebreak() {
+    // TODO 
 }
 
 
