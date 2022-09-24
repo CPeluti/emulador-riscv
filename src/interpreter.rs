@@ -3,45 +3,12 @@ use std::fs;
 use regex::Regex;
 use crate::instructions;
 use crate::parser::Instruction;
-
-//pub fn instructionDeconstructor(instruction: Option<&Instruction>) -> Result<Boo, String> {
-//    let inst = match instruction {
-//        None => return Result::Err("Instruction not found".to_string()),
-//        Some(i) => i,
-//    };
-//}
+use crate::registradores::Registradores;
 
 pub fn interpret(instruction_list: Vec<Instruction>) -> () {
     //pilha
     let mut stack: Vec<Instruction> = instruction_list;
-
-    // registradores
-    let zero = 0;
-    let mut pc = 0;
-    let mut ra = 0;
-    let mut sp = 0;
-    let mut gp = 0;
-    let mut tp = 0;
-    let mut t0 = 0;
-    let mut t1 = 0;
-    let mut t2 = 0;
-    let mut t3 = 0;
-    let mut t4 = 0;
-    let mut t5 = 0;
-    let mut t6 = 0;
-    let mut s0 = 0;
-    let mut s1 = 0;
-    let mut s2 = 0;
-    let mut s3 = 0;
-    let mut s4 = 0;
-    let mut s5 = 0;
-    let mut s6 = 0;
-    let mut s7 = 0;
-    let mut s8 = 0;
-    let mut s9 = 0;
-    let mut s10 = 0;
-    let mut s11 = 0;
-
+    let regs: Registradores;
 
     loop {
         let instruction: Result<&Instruction, &str> = stack.get(pc).ok_or("no instruction");
@@ -59,9 +26,15 @@ pub fn interpret(instruction_list: Vec<Instruction>) -> () {
 
             // Tipo I loads
             Some("0000011") => {
+                let mut rs1, imm, rd: &i32;
+                rs1 = regs.get_reg(inst.rs1);
+                rd = regs.get_reg(inst.rd)
+                imm = inst.imm.to_num //TODO
                 match f3.as_ref().map(|x| &**x) {
                     // lb
-                    Some("000") => {}
+                    Some("000") => {
+                        instructions::lb(*rs1, imm, rd, stack)
+                    }
                     //lh
                     Some("001") => {}
                     //lw
