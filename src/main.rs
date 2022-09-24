@@ -2,6 +2,8 @@ use std::fs;
 use regex::Regex;
 //TODO: definir alias para regs
 mod parser;
+mod interpreter;
+mod instructions;
 // vetor da memoria
 
 fn main() {

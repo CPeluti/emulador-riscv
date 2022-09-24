@@ -3,13 +3,13 @@ use regex::Regex;
 
 #[derive(Debug)]
 pub struct Instruction {
-    opcode: Option<String>,
-    funct3: Option<String>,
-    funct7: Option<String>,
-    imm: Option<String>,
-    rs1: Option<String>,
-    rs2: Option<String>,
-    rd: Option<String>
+    pub opcode: Option<String>,
+    pub funct3: Option<String>,
+    pub funct7: Option<String>,
+    pub imm: Option<String>,
+    pub rs1: Option<String>,
+    pub rs2: Option<String>,
+    pub rd: Option<String>
 }
 
 #[derive(Debug)]

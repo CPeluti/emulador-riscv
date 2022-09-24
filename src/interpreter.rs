@@ -1,7 +1,15 @@
 use std::borrow::Borrow;
 use std::fs;
 use regex::Regex;
+use crate::instructions;
 use crate::parser::Instruction;
+
+//pub fn instructionDeconstructor(instruction: Option<&Instruction>) -> Result<Boo, String> {
+//    let inst = match instruction {
+//        None => return Result::Err("Instruction not found".to_string()),
+//        Some(i) => i,
+//    };
+//}
 
 pub fn interpret(instruction_list: Vec<Instruction>) -> () {
     //pilha
@@ -36,9 +44,18 @@ pub fn interpret(instruction_list: Vec<Instruction>) -> () {
 
 
     loop {
-        let intruction: Option<&Instruction> = stack.get(pc);
-        let Instruction { opcode: op, funct3: f3, funct7: f7, .. } = intruction;
-        match op.as_ref().map(|x| &**x) {
+        let instruction: Result<&Instruction, &str> = stack.get(pc).ok_or("no instruction");
+        let inst = match instruction {
+            Ok(inst) => inst,
+            Err(_) => return //No real error handling here, remake
+        };
+        let opcode = &inst.opcode;
+        let f3 = &inst.funct3;
+        let f7 = &inst.funct7;
+        // Breve refatorada aqui, código do Ligoski infelizmente não funcionava
+
+        // let Instruction { opcode: op, funct3: f3, funct7: f7, .. } = instruction;
+        match opcode.as_ref().map(|x| &**x) {
 
             // Tipo I loads
             Some("0000011") => {
@@ -113,7 +130,9 @@ pub fn interpret(instruction_list: Vec<Instruction>) -> () {
                     Some("0000000") => {
                         match f3.as_ref().map(|x| &**x) {
                             //add
-                            Some("000") => {}
+                            Some("000") => {
+                                // instructions::add(rs1, rs2, rd);
+                            }
                             //sll
                             Some("001") => {}
                             //slt
