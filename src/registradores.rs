@@ -37,7 +37,7 @@ pub struct Registradores {
 }
 
 impl Registradores {
-    pub fn get_reg(&self, bin: &Option<&String>) -> i32 {
+    pub fn get_reg(&mut self, bin: &Option<&String>) -> i32 {
         let register_reference = match bin {
             Some(string) => {
                 string
@@ -86,7 +86,7 @@ impl Registradores {
         }
     }
 
-    pub fn get_pc(&self) -> &i32 {
-        return &self.pc
+    pub fn get_pc(&mut self) -> &i32 {
+        return self.pc
     }
 }
