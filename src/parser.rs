@@ -7,9 +7,9 @@ pub struct Instruction {
     funct3: Option<String>,
     funct7: Option<String>,
     imm: Option<String>,
-    rd: Option<String>,
     rs1: Option<String>,
-    rs2: Option<String>
+    rs2: Option<String>,
+    rd: Option<String>
 }
 
 #[derive(Debug)]
