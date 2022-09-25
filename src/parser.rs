@@ -38,64 +38,64 @@ pub fn parse_instructions(inst: &str) -> Instruction{
         "0000011" | "0010011" | "1100111" | "1110011" | "0000111" => {
             println!("tipo I");
 
-            instruction.rd = Some(inst[20..24].to_string());
-            instruction.funct3 = Some(inst[17..19].to_string());
-            instruction.rs1 = Some(inst[12..16].to_string());
-            instruction.imm = Some(inst[0..11].to_string());
+            instruction.rd = Some(inst[20..25].to_string());
+            instruction.funct3 = Some(inst[17..20].to_string());
+            instruction.rs1 = Some(inst[12..17].to_string());
+            instruction.imm = Some(inst[0..12].to_string());
         }
         
         // Tipo R
         "0110011" | "1010011" => {
             println!("tipo R");
 
-            instruction.rd = Some(inst[20..24].to_string());
-            instruction.funct3 = Some(inst[17..19].to_string());
-            instruction.rs1 = Some(inst[12..16].to_string());
-            instruction.rs2 = Some(inst[7..11].to_string());
-            instruction.funct7 = Some(inst[0..6].to_string());
+            instruction.rd = Some(inst[20..25].to_string());
+            instruction.funct3 = Some(inst[17..20].to_string());
+            instruction.rs1 = Some(inst[12..17].to_string());
+            instruction.rs2 = Some(inst[7..12].to_string());
+            instruction.funct7 = Some(inst[0..7].to_string());
         }
         
         // Tipo S
         "0100011" | "0100111" => {
             println!("tipo S");
 
-            instruction.funct3 = Some(inst[17..19].to_string());
-            instruction.rs1 = Some(inst[12..16].to_string());
-            instruction.rs2 = Some(inst[7..11].to_string());
-            instruction.imm = Some(format!("{}{}",&inst[..6], &inst[20..24]).to_string());
+            instruction.funct3 = Some(inst[17..20].to_string());
+            instruction.rs1 = Some(inst[12..17].to_string());
+            instruction.rs2 = Some(inst[7..12].to_string());
+            instruction.imm = Some(format!("{}{}",&inst[..7], &inst[20..25]).to_string());
         }
 
         // Tipo B
         "1100011" => {
             println!("tipo B");
 
-            let imm_4_1 = &inst[20..23];
+            let imm_4_1 = &inst[20..24];
             let imm_11= inst.chars().nth(24).unwrap();
-            let imm_10_5 = &inst[1..6];
+            let imm_10_5 = &inst[1..7];
             let imm_12= inst.chars().nth(0).unwrap();
             let imm = format!("{}{}{}{}",imm_12, imm_11, imm_10_5, imm_4_1);
             instruction.imm = Some(imm.to_string());
-            instruction.funct3 = Some(inst[17..19].to_string());
-            instruction.rs1 = Some(inst[12..16].to_string());
-            instruction.rs2 = Some(inst[7..11].to_string());
+            instruction.funct3 = Some(inst[17..20].to_string());
+            instruction.rs1 = Some(inst[12..17].to_string());
+            instruction.rs2 = Some(inst[7..12].to_string());
         }
 
         // Tipo U
         "0010111" | "0110111" => {
             println!("tipo U");
 
-            instruction.rd = Some(inst[20..24].to_string());
-            instruction.imm = Some(inst[0..19].to_string());
+            instruction.rd = Some(inst[20..25].to_string());
+            instruction.imm = Some(inst[0..20].to_string());
         }
         
         // Tipo J
         "1101111" => {
             println!("tipo J");
-            instruction.rd = Some(inst[20..24].to_string());
+            instruction.rd = Some(inst[20..25].to_string());
             let imm_20= inst.chars().nth(0).unwrap();
-            let imm_10_1 = &inst[10..19];
+            let imm_10_1 = &inst[10..20];
             let imm_11= inst.chars().nth(9).unwrap();
-            let imm_19_12 = &inst[1..8];
+            let imm_19_12 = &inst[1..9];
             let imm = format!("{}{}{}{}",imm_20, imm_10_1, imm_11, imm_19_12);
             instruction.imm = Some(imm.to_string());
             

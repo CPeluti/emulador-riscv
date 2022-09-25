@@ -82,7 +82,7 @@ impl Registradores {
             "11101" => return self.t4,
             "11110" => return self.t5,
             "11111" => return self.t6,
-            _ => panic!("omegalul")
+            _ => panic!("Register not found: {}, original: {:?}", r, bin)
         }
     }
 
