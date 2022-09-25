@@ -1,3 +1,5 @@
+#[allow(dead_code)]
+
 use std::process::exit;
 use text_io;
 // Tipo R

@@ -8,7 +8,7 @@ use crate::registradores::Registradores;
 pub fn interpret(instruction_list: Vec<Instruction>) -> () {
     //pilha
     let mut stack_inst: Vec<Instruction> = instruction_list;
-    let mut stack: &mut Vec<i32> = &mut [].to_vec();
+    let mut stack = vec![0i32; 1024];
     let mut regs: Registradores = Registradores { zero: (0), pc: (0), ra: (0), sp: (0), gp: (0), tp: (0), t0: (0), t1: (0), t2: (0), t3: (0), t4: (0), t5: (0), t6: (0), s0: (0), s1: (0), s2: (0), s3: (0), s4: (0), s5: (0), s6: (0), s7: (0), s8: (0), s9: (0), s10: (0), s11: (0), a0: (0), a1: (0), a2: (0), a3: (0), a4: (0), a5: (0), a6: (0), a7: (0) };
 
     loop {
@@ -30,7 +30,7 @@ pub fn interpret(instruction_list: Vec<Instruction>) -> () {
             // Tipo I loads
             Some("0000011") => {
                 let rs1 = &regs.get_reg(&inst.rs1.as_ref());
-                let imm = inst.imm.as_ref().unwrap().parse::<i32>().unwrap();
+                let imm = i32::from_str_radix(inst.imm.as_ref().unwrap(), 2).unwrap();
                 let mut rd = &regs.get_reg(&inst.rd.as_ref());
                 match f3.as_ref().map(|x| &**x) {
                     // lb
