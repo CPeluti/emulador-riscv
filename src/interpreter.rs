@@ -12,7 +12,8 @@ pub fn interpret(instruction_list: Vec<Instruction>) -> () {
     let mut regs: Registradores = Registradores { zero: (0), pc: (0), ra: (0), sp: (0), gp: (0), tp: (0), t0: (0), t1: (0), t2: (0), t3: (0), t4: (0), t5: (0), t6: (0), s0: (0), s1: (0), s2: (0), s3: (0), s4: (0), s5: (0), s6: (0), s7: (0), s8: (0), s9: (0), s10: (0), s11: (0), a0: (0), a1: (0), a2: (0), a3: (0), a4: (0), a5: (0), a6: (0), a7: (0) };
 
     loop {
-        let instruction: Result<&Instruction, &str> = stack_inst.get(*regs.get_pc() as usize).ok_or("no instruction");
+        let pc = *regs.get_pc();
+        let instruction: Result<&Instruction, &str> = stack_inst.get(pc as usize).ok_or("no instruction");
         let inst = match instruction {
             Ok(inst) => inst,
             Err(_) => panic!("Instruction not found")
@@ -25,13 +26,15 @@ pub fn interpret(instruction_list: Vec<Instruction>) -> () {
         // let Instruction { opcode: op, funct3: f3, funct7: f7, .. } = instruction;    (antes era isso)
         let mut x: i32 = 0;
         let mut target_pc: i32 = 0;
+
+        //println!("{:?}", regs);
         match opcode.as_ref().map(|x| &**x) {
 
             // Tipo I loads
             Some("0000011") => {
                 let rs1 = &regs.get_reg(&inst.rs1.as_ref());
                 let imm = i32::from_str_radix(inst.imm.as_ref().unwrap(), 2).unwrap();
-                let mut rd = &regs.get_reg(&inst.rd.as_ref());
+                let mut rd = &inst.rd.as_ref();
                 match f3.as_ref().map(|x| &**x) {
                     // lb
                     Some("000") => {
@@ -65,14 +68,16 @@ pub fn interpret(instruction_list: Vec<Instruction>) -> () {
             }
             // Tipo I
             Some("0000111") | Some("0010011") => {
+                
                 let rs1 = &regs.get_reg(&inst.rs1.as_ref());
-                let imm = inst.imm.as_ref().unwrap().parse::<i32>().unwrap();
-                let mut rd = &regs.get_reg(&inst.rd.as_ref());
+                let imm = i32::from_str_radix(inst.imm.as_ref().unwrap(), 2).unwrap();
+                let mut rd = &inst.rd.as_ref();
                 match f3.as_ref().map(|x| &**x) {
                     // addi
                     Some("000") => {
                         instructions::addi(*rs1, imm, &mut x);
                         regs.set_reg(rd, x);
+                        println!("ESTOU AQUI !!! RD: {:?}, x: {}, rs1: {}", rd, x, rs1);
                     }
                     //slli
                     Some("001") => {
@@ -127,15 +132,15 @@ pub fn interpret(instruction_list: Vec<Instruction>) -> () {
             }
             // tipo U - auipc
             Some("0010111") => {
-                let imm = inst.imm.as_ref().unwrap().parse::<i32>().unwrap();
-                let rd = &regs.get_reg(&inst.rd.as_ref());
+                let imm = i32::from_str_radix(inst.imm.as_ref().unwrap(), 2).unwrap();
+                let mut rd = &inst.rd.as_ref();
                 instructions::auipc(imm, *regs.get_pc(), &mut x);
                 regs.set_reg(rd, x);
             }
             // tipo U - lui
             Some("0110111") => {
-                let imm = inst.imm.as_ref().unwrap().parse::<i32>().unwrap();
-                let rd = &regs.get_reg(&inst.rd.as_ref());
+                let imm = i32::from_str_radix(inst.imm.as_ref().unwrap(), 2).unwrap();
+                let mut rd = &inst.rd.as_ref();
                 instructions::lui(imm, &mut x);
                 regs.set_reg(rd, x);
             }
@@ -143,7 +148,7 @@ pub fn interpret(instruction_list: Vec<Instruction>) -> () {
             Some("0100111") | Some("0100011") => {
                 let rs1 = &regs.get_reg(&inst.rs1.as_ref());
                 let rs2 = &regs.get_reg(&inst.rs2.as_ref());
-                let imm = inst.imm.as_ref().unwrap().parse::<i32>().unwrap();
+                let imm = i32::from_str_radix(inst.imm.as_ref().unwrap(), 2).unwrap();
                 match f3.as_ref().map(|x| &**x) {
                     //sb
                     Some("000") => {
@@ -165,8 +170,8 @@ pub fn interpret(instruction_list: Vec<Instruction>) -> () {
             //jalr
             Some("1100111") => {
                 let rs1 = &regs.get_reg(&inst.rs1.as_ref());
-                let imm = inst.imm.as_ref().unwrap().parse::<i32>().unwrap();
-                let mut rd = &regs.get_reg(&inst.rd.as_ref());
+                let imm = i32::from_str_radix(inst.imm.as_ref().unwrap(), 2).unwrap();
+                let mut rd = &inst.rd.as_ref();
                 instructions::jalr(*rs1, imm, &mut x, &mut target_pc);
 
                 regs.set_reg(rd, x);
@@ -174,8 +179,8 @@ pub fn interpret(instruction_list: Vec<Instruction>) -> () {
             }
             //jal
             Some("1101111") => {
-                let imm = inst.imm.as_ref().unwrap().parse::<i32>().unwrap();
-                let mut rd = &regs.get_reg(&inst.rd.as_ref());
+                let imm = i32::from_str_radix(inst.imm.as_ref().unwrap(), 2).unwrap();
+                let mut rd = &inst.rd.as_ref();
                 instructions::jal(imm, &mut x, &mut target_pc);
 
                 regs.set_reg(rd, x);
@@ -186,7 +191,7 @@ pub fn interpret(instruction_list: Vec<Instruction>) -> () {
             Some("0110011") => {
                 let rs1 = &regs.get_reg(&inst.rs1.as_ref());
                 let rs2 = &regs.get_reg(&inst.rs2.as_ref());
-                let mut rd = &regs.get_reg(&inst.rd.as_ref());
+                let mut rd = &inst.rd.as_ref();
                 match f7.as_ref().map(|x| &**x) {
                     Some("0000000") => {
                         match f3.as_ref().map(|x| &**x) {
@@ -310,16 +315,16 @@ pub fn interpret(instruction_list: Vec<Instruction>) -> () {
 
             //Tipo I
             Some("1110011") => {
-                let rs1 = &regs.get_reg(&inst.rs1.as_ref());
-                let imm = inst.imm.as_ref().unwrap().parse::<i32>().unwrap();
-                let mut rd = &regs.get_reg(&inst.rd.as_ref());
+                let a7 = regs.get_reg(&Some(&String::from("10001")));
+                let mut a0 = regs.get_reg(&Some(&String::from("01010")));
+                let mut rd = &inst.rd.as_ref();
                 match f3.as_ref().map(|x| &**x) {
                     //ecall / uret
                     Some("000") => {
-                        instructions::ecall(&mut x, *rs1, &mut target_pc);
+                        instructions::ecall(&mut a0, a7, &mut target_pc);
 
-                        regs.set_reg(rd, x);
-                        regs.set_pc(target_pc);
+                        //regs.set_reg(rd, x);
+                        //regs.set_pc(target_pc);
                     }
                     /*
                     //csrrw
@@ -349,7 +354,7 @@ pub fn interpret(instruction_list: Vec<Instruction>) -> () {
             Some("1100011") => {
                 let rs1 = &regs.get_reg(&inst.rs1.as_ref());
                 let rs2 = &regs.get_reg(&inst.rs2.as_ref());
-                let imm = inst.imm.as_ref().unwrap().parse::<i32>().unwrap();
+                let imm = i32::from_str_radix(inst.imm.as_ref().unwrap(), 2).unwrap();
                 match f3.as_ref().map(|x| &**x) {
                     //beq
                     Some("000") => {
@@ -390,5 +395,6 @@ pub fn interpret(instruction_list: Vec<Instruction>) -> () {
                 panic!("Invalid opcode");
             }
         }
+    regs.set_pc(pc + 1);
     }
 }

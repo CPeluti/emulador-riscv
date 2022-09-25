@@ -140,6 +140,7 @@ pub fn jalr(rs1: i32, imm: i32, rd: &mut i32, pc: &mut i32) {
 }
 
 pub fn ecall(a0: &mut i32, a7: i32, pc: &mut i32) {
+    println!("a7: {}",a7);
     /*
     1 - printInt
     2 - printFloat
