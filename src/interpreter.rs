@@ -23,11 +23,9 @@ pub fn interpret(instruction_list: Vec<Instruction>) -> () {
         let f7 = &inst.funct7;
 
         // Breve refatorada aqui, código do Ligoski infelizmente não funcionava
-        // let Instruction { opcode: op, funct3: f3, funct7: f7, .. } = instruction;    (antes era isso)
         let mut x: i32 = 0;
         let mut target_pc: i32 = 0;
 
-        //println!("{:?}", regs);
         match opcode.as_ref().map(|x| &**x) {
 
             // Tipo I loads
@@ -77,7 +75,6 @@ pub fn interpret(instruction_list: Vec<Instruction>) -> () {
                     Some("000") => {
                         instructions::addi(*rs1, imm, &mut x);
                         regs.set_reg(rd, x);
-                        println!("ESTOU AQUI !!! RD: {:?}, x: {}, rs1: {}", rd, x, rs1);
                     }
                     //slli
                     Some("001") => {
@@ -326,25 +323,6 @@ pub fn interpret(instruction_list: Vec<Instruction>) -> () {
                         //regs.set_reg(rd, x);
                         //regs.set_pc(target_pc);
                     }
-                    /*
-                    //csrrw
-                    Some("001") => {
-                    }
-                    //csrrs
-                    Some("010") => {
-                    }
-                    //csrrc
-                    Some("011") => {
-                    }
-                    //csrrwi
-                    Some("101") => {
-                    }
-                    //csrrsi
-                    Some("110") => {
-                    }
-                    //csrrci
-                    Some("111") => {}
-                    */
                     _ => {
                         panic!("Invalid funct3 value")
                     }

@@ -153,5 +153,4 @@ pub fn process_inst(instructions: Vec<Instruction>) {
     for inst in instructions {
 
     }
-    //match para resolver a instrucao
 }
