@@ -86,55 +86,60 @@ impl Registradores {
         }
     }
 
-pub fn set_reg(&mut self, target_register: &Option<&String>, target_value: i32) -> () {
-    let register_reference = match target_register {
-        Some(string) => {
-            string
-        }
-        None => {
-            panic!("sexy ass")
-        }
-    };
-    let register = &**register_reference;
-    let r = &register[..];
+    pub fn set_reg(&mut self, target_register: &i32, target_value: i32) -> () {
+        //let register_reference = match target_register {
+        //    Some(string) => {
+        //        string
+        //    }
+        //    None => {
+        //        panic!("sexy ass")
+        //    }
+        //};
+        //let register = &**register_reference;
+        //let r = &register[..];
 
-    match r {
-        "00000" => return,
-        "00001" => self.ra = target_value,
-        "00010" => self.sp = target_value,
-        "00011" => self.gp = target_value,
-        "00100" => self.tp = target_value,
-        "00101" => self.t0 = target_value,
-        "00110" => self.t1 = target_value,
-        "00111" => self.t2 = target_value,
-        "01000" => self.s0 = target_value,
-        "01001" => self.s1 = target_value,
-        "01010" => self.a0 = target_value,
-        "01011" => self.a1 = target_value,
-        "01100" => self.a2 = target_value,
-        "01101" => self.a3 = target_value,
-        "01110" => self.a4 = target_value,
-        "01111" => self.a5 = target_value,
-        "10000" => self.a6 = target_value,
-        "10001" => self.a7 = target_value,
-        "10010" => self.s2 = target_value,
-        "10011" => self.s3 = target_value,
-        "10100" => self.s4 = target_value,
-        "10101" => self.s5 = target_value,
-        "10110" => self.s6 = target_value,
-        "10111" => self.s7 = target_value,
-        "11000" => self.s8 = target_value,
-        "11001" => self.s9 = target_value,
-        "11010" => self.s10 = target_value,
-        "11011" => self.s11 = target_value,
-        "11100" => self.t3 = target_value,
-        "11101" => self.t4 = target_value,
-        "11110" => self.t5 = target_value,
-        "11111" => self.t6 = target_value,
-        _ => panic!("omegalul")
+        match target_register {
+            00000 => return,
+            00001 => self.ra = target_value,
+            00010 => self.sp = target_value,
+            00011 => self.gp = target_value,
+            00100 => self.tp = target_value,
+            00101 => self.t0 = target_value,
+            00110 => self.t1 = target_value,
+            00111 => self.t2 = target_value,
+            01000 => self.s0 = target_value,
+            01001 => self.s1 = target_value,
+            01010 => self.a0 = target_value,
+            01011 => self.a1 = target_value,
+            01100 => self.a2 = target_value,
+            01101 => self.a3 = target_value,
+            01110 => self.a4 = target_value,
+            01111 => self.a5 = target_value,
+            10000 => self.a6 = target_value,
+            10001 => self.a7 = target_value,
+            10010 => self.s2 = target_value,
+            10011 => self.s3 = target_value,
+            10100 => self.s4 = target_value,
+            10101 => self.s5 = target_value,
+            10110 => self.s6 = target_value,
+            10111 => self.s7 = target_value,
+            11000 => self.s8 = target_value,
+            11001 => self.s9 = target_value,
+            11010 => self.s10 = target_value,
+            11011 => self.s11 = target_value,
+            11100 => self.t3 = target_value,
+            11101 => self.t4 = target_value,
+            11110 => self.t5 = target_value,
+            11111 => self.t6 = target_value,
+            _ => panic!("omegalul")
+        }
     }
 
     pub fn get_pc(&mut self) -> &i32 {
-        return self.pc
+        return &self.pc
+    }
+
+    pub fn set_pc(&mut self, target_value: i32) -> () {
+        self.pc = target_value;
     }
 }

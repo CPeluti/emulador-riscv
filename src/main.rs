@@ -11,8 +11,8 @@ fn main() {
     let parsed_file = parser::parse_file("src/test.txt");
     println!("{:?}", parsed_file);
     // println!("{:?}",parsed_file);
-    parser::process_inst(parsed_file);
     // for line in 0..parsed_file.len() {
     //     println!("{}", parsed_file[line]);
     // }
+    interpreter::interpret(parsed_file);
 }

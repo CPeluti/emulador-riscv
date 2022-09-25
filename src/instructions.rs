@@ -112,23 +112,23 @@ pub fn sltiu(rs1: u32, imm: u32, rd: &mut i32) {
     *rd = if rs1 < imm {1} else {0};
 }
 
-pub fn lb(rs1: i32, imm: i32, rd: &mut i32, stack: Vec<i32>) {
+pub fn lb(rs1: i32, imm: i32, rd: &mut i32, stack: &Vec<i32>) {
     *rd = stack[(rs1 + imm) as usize] & 0b11111111
 }
 
-pub fn lh(rs1: i32, imm: i32, rd: &mut i32, stack: Vec<i32>) {
+pub fn lh(rs1: i32, imm: i32, rd: &mut i32, stack: &Vec<i32>) {
     *rd = stack[(rs1 + imm) as usize] & 0b1111111111111111
 }
 
-pub fn lw(rs1: i32, imm: i32, rd: &mut i32, stack: Vec<i32>) {
+pub fn lw(rs1: i32, imm: i32, rd: &mut i32, stack: &Vec<i32>) {
     *rd = stack[(rs1 + imm) as usize]
 }
 
-pub fn lbu(rs1: u32, imm: u32, rd: &mut i32, stack: Vec<i32>) {
+pub fn lbu(rs1: u32, imm: u32, rd: &mut i32, stack: &Vec<i32>) {
     *rd = stack[(rs1 + imm) as usize] & 0b11111111
 }
 
-pub fn lhu(rs1: u32, imm: u32, rd: &mut i32, stack: Vec<i32>) {
+pub fn lhu(rs1: u32, imm: u32, rd: &mut i32, stack: &Vec<i32>) {
     *rd = stack[(rs1 + imm) as usize] & 0b1111111111111111
 }
 
